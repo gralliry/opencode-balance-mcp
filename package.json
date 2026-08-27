@@ -1,6 +1,6 @@
 {
   "name": "opencode-balance-mcp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "MCP server for querying OpenCode subscription data: Go quota (rolling/weekly/monthly usage) and Zen prepaid balance. Zero dependencies.",
   "type": "module",
   "bin": {
