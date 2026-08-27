@@ -82,7 +82,24 @@ No arguments. Reads the workspace dashboard page and parses the Zen balance
 
 ## Configure in MCP clients
 
-### pi (`~/.pi/agent/mcp.json`)
+### opencode (`~/.config/opencode/opencode.json`)
+
+```json
+{
+  "mcp": {
+    "opencode-balance": {
+      "type": "local",
+      "command": ["npx", "-y", "opencode-balance-mcp"],
+      "environment": {
+        "OPENCODE_GO_WORKSPACE_ID": "wrk_xxx",
+        "OPENCODE_GO_AUTH_COOKIE": "Fe26.2**..."
+      }
+    }
+  }
+}
+```
+
+### Standard MCP (stdio) — any client
 
 ```json
 {
@@ -99,15 +116,15 @@ No arguments. Reads the workspace dashboard page and parses the Zen balance
 }
 ```
 
-### opencode (`~/.config/opencode/opencode.json`)
+### pi (`~/.pi/agent/mcp.json`)
 
 ```json
 {
-  "mcp": {
+  "mcpServers": {
     "opencode-balance": {
-      "type": "local",
-      "command": ["npx", "-y", "opencode-balance-mcp"],
-      "environment": {
+      "command": "npx",
+      "args": ["-y", "opencode-balance-mcp"],
+      "env": {
         "OPENCODE_GO_WORKSPACE_ID": "wrk_xxx",
         "OPENCODE_GO_AUTH_COOKIE": "Fe26.2**..."
       }
