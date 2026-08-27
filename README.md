@@ -179,8 +179,9 @@ an `isError` result.
 
 ## Architecture
 
-- `src/index.mjs` — MCP stdio protocol, credentials (CLI/env), page fetching glue
-- `src/http.mjs` — network policy: timeout, retry-with-backoff, 429/`Retry-After` handling
+- `src/index.mjs` — entry point: CLI/env credentials, wiring, startup
+- `src/mcp.mjs` — MCP stdio protocol layer + tool implementations
+- `src/http.mjs` — HTTP layer: timeout, retry-with-backoff, redirect/auth error handling
 - `src/parse.mjs` — pure parsing/formatting helpers (no I/O, unit-tested directly)
 
 ## Publish

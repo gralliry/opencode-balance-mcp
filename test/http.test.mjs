@@ -1,6 +1,6 @@
-// 单元测试：用本地 http 服务器验证 fetchWithRetry 的超时 / 重试 / 退避策略。
+// 单元测试：用本地 http 服务器验证网络层的超时 / 重试 / 退避 / 页面抓取。
 import { createServer } from "node:http";
-import { fetchWithRetry } from "../src/http.mjs";
+import { fetchWithRetry, fetchPage } from "../src/http.mjs";
 
 // 简易断言辅助。
 let pass = 0,
@@ -70,6 +70,9 @@ const server = createServer((req, res) => {
             location: "https://auth.opencode.ai/authorize?client_id=app",
         });
         res.end();
+    } else if (req.url === "/unauthorized") {
+        res.writeHead(401);
+        res.end();
     } else {
         res.writeHead(404);
         res.end();
@@ -129,6 +132,24 @@ try {
         "location header preserved",
         redir.headers.get("location")?.startsWith("https://auth.opencode.ai"),
         true,
+    );
+
+    // 8. fetchPage：200 返回文本，cookie 自动加 auth= 前缀
+    const pageText = await fetchPage(`${base}/ok`, "Fe26.2**abc");
+    eq("fetchPage 200 returns body text", pageText, "hello");
+
+    // 9. fetchPage：302（登录页跳转）→ 明确报 cookie 过期
+    await rejects(
+        "fetchPage 302 raises auth-redirect error",
+        () => fetchPage(`${base}/redirect`, "Fe26.2**expired"),
+        /Authentication failed.*redirected/,
+    );
+
+    // 10. fetchPage：401 → 明确报认证失败
+    await rejects(
+        "fetchPage 401 raises auth error",
+        () => fetchPage(`${base}/unauthorized`, "Fe26.2**expired"),
+        /Authentication failed \(HTTP 401\)/,
     );
 } finally {
     server.close();

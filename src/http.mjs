@@ -63,3 +63,37 @@ function retryDelayFor(resp, attempt, retryDelayMs) {
     }
     return retryDelayMs * (attempt + 1);
 }
+
+/**
+ * GET a URL with an auth cookie and return the body text.
+ *
+ * Redirects are NOT followed: the dashboard sends a 3xx to /auth/authorize
+ * when the cookie is expired, so a redirect here means an invalid session.
+ *
+ * @param {string} url - Full URL to fetch.
+ * @param {string} authCookie - Auth cookie value (prefixed with `auth=` if needed).
+ * @returns {Promise<string>} The response body as text.
+ */
+export async function fetchPage(url, authCookie) {
+    const cookie = authCookie.startsWith("auth=")
+        ? authCookie
+        : `auth=${authCookie}`;
+    const resp = await fetchWithRetry(url, {
+        headers: { Cookie: cookie },
+        redirect: "manual",
+    });
+    if (resp.status === 401 || resp.status === 403) {
+        throw new Error(
+            `Authentication failed (HTTP ${resp.status}): auth cookie may be expired. Re-login to opencode.ai and refresh it.`,
+        );
+    }
+    if (resp.status >= 300 && resp.status < 400) {
+        throw new Error(
+            `Authentication failed: dashboard redirected (HTTP ${resp.status} → ${resp.headers.get("location") ?? "?"}). The auth cookie may be expired or the workspace id invalid.`,
+        );
+    }
+    if (!resp.ok) {
+        throw new Error(`Request failed (HTTP ${resp.status})`);
+    }
+    return resp.text();
+}
