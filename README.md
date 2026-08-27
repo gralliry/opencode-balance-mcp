@@ -116,6 +116,38 @@ No arguments. Reads the workspace dashboard page and parses the Zen balance
 }
 ```
 
+### Claude Code (`.mcp.json` at project root)
+
+```json
+{
+  "mcpServers": {
+    "opencode-balance": {
+      "command": "npx",
+      "args": ["-y", "opencode-balance-mcp"],
+      "env": {
+        "OPENCODE_GO_WORKSPACE_ID": "wrk_xxx",
+        "OPENCODE_GO_AUTH_COOKIE": "Fe26.2**..."
+      }
+    }
+  }
+}
+```
+
+Or via CLI: `claude mcp add opencode-balance -e OPENCODE_GO_WORKSPACE_ID=wrk_xxx -e OPENCODE_GO_AUTH_COOKIE="Fe26.2**..." -- npx -y opencode-balance-mcp`
+
+### Codex (`~/.codex/config.toml`)
+
+```toml
+[mcp_servers.opencode-balance]
+command = "npx"
+args = ["-y", "opencode-balance-mcp"]
+enabled = true
+
+[mcp_servers.opencode-balance.env]
+OPENCODE_GO_WORKSPACE_ID = "wrk_xxx"
+OPENCODE_GO_AUTH_COOKIE = "Fe26.2**..."
+```
+
 ### pi (`~/.pi/agent/mcp.json`)
 
 ```json
