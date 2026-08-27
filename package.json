@@ -1,0 +1,31 @@
+{
+  "name": "opencode-balance-mcp",
+  "version": "1.0.1",
+  "description": "MCP server for querying OpenCode subscription data: Go quota (rolling/weekly/monthly usage) and Zen prepaid balance. Zero dependencies.",
+  "type": "module",
+  "bin": {
+    "opencode-balance-mcp": "src/index.mjs"
+  },
+  "main": "./src/index.mjs",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "start": "node src/index.mjs",
+    "test": "node test/parse.test.mjs && node test/zen-format.test.mjs && node test/http.test.mjs && node test/test.mjs"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "opencode",
+    "opencode-go",
+    "opencode-zen",
+    "quota",
+    "usage",
+    "balance"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}
