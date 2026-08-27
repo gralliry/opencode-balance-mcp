@@ -82,11 +82,6 @@ No arguments. Reads the workspace dashboard page and parses the Zen balance
 
 ## Configure in MCP clients
 
-The server speaks **MCP over stdio**: each client just launches it as a local process
-(`npx -y opencode-balance-mcp`) and passes your credentials through the client's config
-— workspace ID and auth cookie via the `env` block, or via CLI args when running manually
-(see [Credentials](#credentials)). The two tools then appear like any other MCP tool.
-
 ### pi (`~/.pi/agent/mcp.json`)
 
 ```json
